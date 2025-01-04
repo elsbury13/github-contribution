@@ -1,6 +1,6 @@
 {
   "name": "@elsbury13/github-contributions",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Github Contribution Scrapper",
   "main": "index.js",
   "scripts": {
@@ -8,10 +8,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/elsbury13/github-contributions"
+    "url": "https://github.com/elsbury13/github-contribution"
   },
   "publishConfig": {
-    "registry":"https://npm.pkg.github.com/@elsbury13/github-contributions"
+    "registry":"https://npm.pkg.github.com/@elsbury13/github-contribution"
   },
   "keywords": [
     "Gihub-Contribution"
@@ -19,6 +19,6 @@
   "author": "@elsbury13",
   "license": "ISC",
   "dependencies": {
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^3.3.2"
   }
 }

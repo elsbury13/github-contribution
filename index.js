@@ -1,61 +1,26 @@
-var fetch = require('node-fetch')
-
 function contributions(user) {
   return fetch('https://github.com/users/{user}/contributions'.replace('{user}', user))
     .then((res) => res.text())
-    .then(loadGraph)
+    .then(processData)
 }
 
-function loadGraph (text) {
-  var todaysDate = new Date()
-  var lastMonth = todaysDate.setMonth(todaysDate.getMonth() - 1)
-  var date = new Date()
-  var lastWeek = date.setDate(date.getDate() - 7)
+function processData (text) {
+  const todaysDate = new Date()
+  const lastMonth = todaysDate.toLocaleString('default', { month: 'long' })
 
   matches = text.match(
-    /(data-count="\d+".*data-date="\d{4}-\d{2}-\d{2}")/g
+    /\d{1,2} contributions on \w{3,9} \d{1,2}/gm
   )
 
-  return {
-    week: contribution(matches, 'week', lastWeek),
-    month: contribution(matches, 'month', lastMonth),
-    year: contribution(matches, 'year', false)
-  }
-}
-
-function contribution (matches, type, check) {
-  var total = 0
-  var checkDate
+  let yearTotal = 0
+  let monthTotal = 0
 
   data = matches.map(function (match) {
-    if (type == 'year') {
-      return {
-        count: +match.match(/data-count="(\d+)"/)[1],
-        date: match.match(/data-date="(\d{4}-\d{2}-\d{2})"/)[1],
-      }
-    } 
-    
-    var date = new Date(match.match(/data-date="(\d{4}-\d{2}-\d{2})"/)[1])
-    checkDate = check == 'month' ? date.setMonth(date.getMonth()) : date.setDate(date.getDate())
-
-    if (checkDate >= check) {
-      return {
-        count: +match.match(/data-count="(\d+)"/)[1],
-        date: match.match(/data-date="(\d{4}-\d{2}-\d{2})"/)[1]
-      }
-    } else {
-      return {
-        count: 0,
-        date: match.match(/data-date="(\d{4}-\d{2}-\d{2})"/)[1]
-      }
-    }
+    monthTotal = +monthTotal + +match.includes(lastMonth)
+    yearTotal = +yearTotal + +match.split(' ')[0]
   })
-  
-  for (var idx = 0; idx <= data.length - 1; idx++) {
-    total += +data[idx].count
-  }
 
-  return total
+  return { month: monthTotal, year: yearTotal }
 }
 
 module.exports = contributions

@@ -1,23 +1,11 @@
-var contributions = require('./')
-var user = 'elsbury13'
+const contributions = require('./')
+const user = 'elsbury13'
 
 let commits
 
 contributions(user)
   .then(data => {
     commits = data
+    console.log(commits.month)
+    console.log(commits.year)
 })
-
-// Can access commits once the promise has resolved
-
-// var weeklyCommits = commits.week
-//var monthlyCommits = commits.month
-//var yearlyCommits = commits.year
-
-contributions(user)
-  .then(data => {
-    console.log(data.week)
-    console.log(data.month)
-    console.log(data.year)
-})
-
